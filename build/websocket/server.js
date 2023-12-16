@@ -13,6 +13,7 @@ const webSocketCors = {
     allowHeaders: ["Content-Type", "Authorization"],
 };
 function createWebSocketServer(server) {
+    console.log('creating websocket server, allowed origin: ', webSocketCors.origin);
     const io = new socket_io_1.Server(server, {
         cors: webSocketCors,
     });

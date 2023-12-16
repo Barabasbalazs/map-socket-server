@@ -2,7 +2,7 @@
   "name": "socket-server",
   "version": "1.0.0",
   "description": "Socket Server",
-  "main": "index.js",
+  "main": "build/index.js",
   "author": "Barabas Balazs",
   "license": "MIT",
   "private": true,
