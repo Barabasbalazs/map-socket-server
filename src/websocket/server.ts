@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import configProvider from "../config/config-provider";
 import { Server as HttpServer } from "http";
+import { userArraySchema } from "../models/user.dto";
 
 const { clientUrl } = configProvider;
 
@@ -31,8 +32,16 @@ function createWebSocketServer(server: HttpServer) {
   io.of("/updates").on("connection", (socket) => {
     console.log("New update connection", socket.id);
 
-    socket.on("update-location", (data) => {
+    socket.on("update-location", async (data) => {
       console.log("update-location", data);
+      //validation comes here
+      try {
+        await userArraySchema.validateAsync(data);
+      } catch (error) {
+        console.log("validation error", error);
+        return;
+      }
+     
       io.of("/markers").emit("update-location", data);
     });
   });
