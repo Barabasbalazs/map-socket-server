@@ -30,7 +30,6 @@ build
 .python_packages/
 
 # Python Environments
-.env
 .venv
 env/
 venv/
