@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import configProvider from "../config/config-provider";
-import { Server as HttpServer } from "http";
 import { userArraySchema } from "../models/user.dto";
+import { Server as HttpServer } from "http";
 
 const { clientUrl } = configProvider;
 
@@ -12,7 +12,10 @@ const webSocketCors = {
 };
 
 function createWebSocketServer(server: HttpServer) {
-  console.log('creating websocket server, allowed origin: ', webSocketCors.origin);
+  console.log(
+    "creating websocket server, allowed origin: ",
+    webSocketCors.origin
+  );
   const io = new Server(server, {
     cors: webSocketCors,
   });
@@ -32,8 +35,8 @@ function createWebSocketServer(server: HttpServer) {
   io.of("/updates").on("connection", (socket) => {
     console.log("New update connection", socket.id);
 
-    socket.on("update-location", async (data) => {
-      console.log("update-location", data);
+    socket.on(`update-location-${socket.id?.toString()}`, async (data) => {
+      console.log(`update-location-${socket.id?.toString()}`, data);
       //validation comes here
       try {
         await userArraySchema.validateAsync(data);
@@ -41,8 +44,8 @@ function createWebSocketServer(server: HttpServer) {
         console.log("validation error", error);
         return;
       }
-     
-      io.of("/markers").emit("update-location", data);
+
+      io.of("/markers").emit(`update-location-${data?.[0]?.id}`, data);
     });
   });
 
